@@ -31,14 +31,14 @@ figRpm = plt.figure(figsize=(10,3))
 ax4 = figRpm.add_subplot(1,2,1)
 pdatos,udatos = [],[]
 
-def humedad():  
+def mostrarHumedad():  
     def animate(i,xdatos,ydatos):
         global respuesta
         respuesta = arduino.readline().decode('ascii')
         lista1 = respuesta.split(',')
-        var2 = float(lista1[1])
+        humedad = float(lista1[1])
         
-        etiqueta_01['text']='Humedad: '+str(var2)+" % "
+        etiqueta_01['text']='Humedad: '+str(humedad)+" % "
         
         xdatos.append(i)
         ydatos.append(var2)
@@ -50,7 +50,7 @@ def humedad():
     canvas.draw()
 
 
-def temperatura():  
+def mostrarTemperatura():  
     def animate(i,zdatos,idatos):
         #respuesta = arduino.readline().decode('ascii')
         
@@ -68,7 +68,7 @@ def temperatura():
     ani2 = animation.FuncAnimation(figTemperatura,animate, fargs=(zdatos,idatos))
     canvas2.draw()
 
-def distancia():  
+def mostrarDistancia():  
     def animate(i,kdatos,ldatos):
         #respuesta = arduino.readline().decode('ascii')
         
@@ -88,7 +88,7 @@ def distancia():
     ani3 = animation.FuncAnimation(figDistancia,animate, fargs=(kdatos,ldatos))
     canvas3.draw()
 
-def rpm():  
+def mostrarRpm():  
     def animate(i,pdatos,udatos):
         #respuesta = arduino.readline().decode('ascii')
         
@@ -157,10 +157,10 @@ canvas3.get_tk_widget().place(x=0, y=600)
 canvas4 = FigureCanvasTkAgg(figRpm, master=frame)
 canvas4.get_tk_widget().place(x=600, y=600)
 
-humedad()
-temperatura()
-distancia()
-rpm()
+mostrarHumedad()
+mostrarTemperatura()
+mostrarDistancia()
+mostrarRpm()
 
 
 Button(frame, text='Apagar Motor', width=15,height=2,font='Monospace 18 bold',bg='LightSkyBlue2', command=apagar).place(x=1590, y=740)

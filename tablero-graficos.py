@@ -15,34 +15,30 @@ arduino = serial.Serial('COM3', 9600)
 time.sleep(1)
 
 
-fig = plt.figure(figsize=(6,2))
-ax = fig.add_subplot(1,2,1)
+figHumedad = plt.figure(figsize=(6,2))
+ax = figHumedad.add_subplot(1,2,1)
 xdatos, ydatos = [],[]
 
-fig2 = plt.figure(figsize=(6,2))
-ax2 = fig2.add_subplot(1,2,1)
+figTemperatura = plt.figure(figsize=(6,2))
+ax2 = figTemperatura.add_subplot(1,2,1)
 zdatos, idatos = [],[]
 
-fig3 = plt.figure(figsize=(10,3))
-ax3 = fig3.add_subplot(1,2,1)
+figDistancia = plt.figure(figsize=(10,3))
+ax3 = figDistancia.add_subplot(1,2,1)
 kdatos,ldatos = [],[]
 
-fig4 = plt.figure(figsize=(10,3))
-ax4 = fig4.add_subplot(1,2,1)
+figRpm = plt.figure(figsize=(10,3))
+ax4 = figRpm.add_subplot(1,2,1)
 pdatos,udatos = [],[]
 
-def graficar1():  
+def humedad():  
     def animate(i,xdatos,ydatos):
         global respuesta
         respuesta = arduino.readline().decode('ascii')
-        lista1 = respuesta.split(',') 
-        var1 = lista1[0]
-        var2 = lista1[1]
-        var1 = float(var1)
-        var2 = float(var2)
+        lista1 = respuesta.split(',')
+        var2 = float(lista1[1])
         
         etiqueta_01['text']='Humedad: '+str(var2)+" % "
-        etiqueta_02['text']='Temperatura: '+str(var1)+" C "
         
         xdatos.append(i)
         ydatos.append(var2)
@@ -50,22 +46,18 @@ def graficar1():
         ax.plot(xdatos,ydatos)     
     
     global ani
-    ani = animation.FuncAnimation(fig,animate, fargs=(xdatos,ydatos))
+    ani = animation.FuncAnimation(figHumedad,animate, fargs=(xdatos,ydatos))
     canvas.draw()
 
-    graficar2()
-    graficar3()
-    graficar4()
 
-def graficar2():  
+def temperatura():  
     def animate(i,zdatos,idatos):
         #respuesta = arduino.readline().decode('ascii')
         
         lista1 = respuesta.split(',') 
-        var1 = lista1[0]
-        var2 = lista1[1]
-        var1 = float(var1)
-        var2 = float(var2)
+        var1 = float(lista1[0])
+
+        etiqueta_02['text']='Temperatura: '+str(var1)+" C "
 
         zdatos.append(i)
         idatos.append(var1)
@@ -73,20 +65,15 @@ def graficar2():
         ax2.plot(zdatos,idatos,color='red')
 
     global ani2
-    ani2 = animation.FuncAnimation(fig2,animate, fargs=(zdatos,idatos))
-    canvass.draw()
+    ani2 = animation.FuncAnimation(figTemperatura,animate, fargs=(zdatos,idatos))
+    canvas2.draw()
 
-def graficar3():  
+def distancia():  
     def animate(i,kdatos,ldatos):
         #respuesta = arduino.readline().decode('ascii')
         
         lista1 = respuesta.split(',') 
-        var1 = lista1[0]
-        var2 = lista1[1]
-        var3 = lista1[2]
-        var1 = float(var1)
-        var2 = float(var2)
-        var3 = float(var3)
+        var3 = float(lista1[2])
         if (var3 < 0):
             var3=0.0
 
@@ -98,23 +85,16 @@ def graficar3():
         ax3.plot(kdatos,ldatos, color='m')
 
     global ani3
-    ani3 = animation.FuncAnimation(fig3,animate, fargs=(kdatos,ldatos))
-    canvasss.draw()
+    ani3 = animation.FuncAnimation(figDistancia,animate, fargs=(kdatos,ldatos))
+    canvas3.draw()
 
-def graficar4():  
+def rpm():  
     def animate(i,pdatos,udatos):
         #respuesta = arduino.readline().decode('ascii')
         
         lista1 = respuesta.split(',') 
-        var1 = lista1[0]
-        var2 = lista1[1]
-        var3 = lista1[2]
-        var4 = lista1[3]
-        var1 = float(var1)
-        var2 = float(var2)
-        var3 = float(var3)
-        var4 = float(var4)
-
+        var4 = float(lista1[3])
+        
         etiqueta_04['text']=' '+str(var4)+" rpm"
 
         pdatos.append(i)
@@ -123,8 +103,8 @@ def graficar4():
         ax4.plot(pdatos,udatos, color='k')
 
     global ani4
-    ani4 = animation.FuncAnimation(fig4,animate, fargs=(pdatos,udatos))
-    canvassss.draw()
+    ani4 = animation.FuncAnimation(figRpm,animate, fargs=(pdatos,udatos))
+    canvas4.draw()
 
 def salir():
     arduino.close()
@@ -165,21 +145,23 @@ etiqueta_04 = Label(frame, font='Monospace 28 bold')
 etiqueta_04.place(x=880,y=550)
 
 
-canvas = FigureCanvasTkAgg(fig, master=frame)
+canvas = FigureCanvasTkAgg(figHumedad, master=frame)
 canvas.get_tk_widget().place(x=30, y=140)
 
-canvass = FigureCanvasTkAgg(fig2, master=frame)
-canvass.get_tk_widget().place(x=480, y=140)
+canvas2 = FigureCanvasTkAgg(figTemperatura, master=frame)
+canvas2.get_tk_widget().place(x=480, y=140)
 
-canvasss = FigureCanvasTkAgg(fig3, master=frame)
-canvasss.get_tk_widget().place(x=0, y=600)
+canvas3 = FigureCanvasTkAgg(figDistancia, master=frame)
+canvas3.get_tk_widget().place(x=0, y=600)
 
-canvassss = FigureCanvasTkAgg(fig4, master=frame)
-canvassss.get_tk_widget().place(x=600, y=600)
+canvas4 = FigureCanvasTkAgg(figRpm, master=frame)
+canvas4.get_tk_widget().place(x=600, y=600)
 
+humedad()
+temperatura()
+distancia()
+rpm()
 
-
-graficar1()
 
 Button(frame, text='Apagar Motor', width=15,height=2,font='Monospace 18 bold',bg='LightSkyBlue2', command=apagar).place(x=1590, y=740)
 Button(frame, text='Encender Motor', width=15,height=2,font='Monospace 18 bold',bg='LightSkyBlue2', command=encender).place(x=1290, y=740)

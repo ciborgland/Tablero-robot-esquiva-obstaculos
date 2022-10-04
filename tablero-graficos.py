@@ -35,13 +35,13 @@ def mostrarHumedad():
     def animate(i,xdatos,ydatos):
         global respuesta
         respuesta = arduino.readline().decode('ascii')
-        lista1 = respuesta.split(',')
-        humedad = float(lista1[1])
+        listaH = respuesta.split(',')
+        humedad = float(listaH[1])
         
         etiqueta_01['text']='Humedad: '+str(humedad)+" % "
         
         xdatos.append(i)
-        ydatos.append(var2)
+        ydatos.append(humedad)
         ax.clear()
         ax.plot(xdatos,ydatos)     
     
@@ -54,13 +54,13 @@ def mostrarTemperatura():
     def animate(i,zdatos,idatos):
         #respuesta = arduino.readline().decode('ascii')
         
-        lista1 = respuesta.split(',') 
-        var1 = float(lista1[0])
+        listaT = respuesta.split(',') 
+        temperatura = float(listaT[0])
 
-        etiqueta_02['text']='Temperatura: '+str(var1)+" C "
+        etiqueta_02['text']='Temperatura: '+str(temperatura)+" C "
 
         zdatos.append(i)
-        idatos.append(var1)
+        idatos.append(temperatura)
         ax2.clear()
         ax2.plot(zdatos,idatos,color='red')
 
@@ -72,15 +72,15 @@ def mostrarDistancia():
     def animate(i,kdatos,ldatos):
         #respuesta = arduino.readline().decode('ascii')
         
-        lista1 = respuesta.split(',') 
-        var3 = float(lista1[2])
-        if (var3 < 0):
-            var3=0.0
+        listaD = respuesta.split(',') 
+        distancia = float(listaD[2])
+        if (distancia < 0):
+            distancia=0.0
 
-        etiqueta_03['text']='Distancia: '+str(var3)+" cm"
+        etiqueta_03['text']='Distancia: '+str(distancia)+" cm"
 
         kdatos.append(i)
-        ldatos.append(var3)
+        ldatos.append(distancia)
         ax3.clear()
         ax3.plot(kdatos,ldatos, color='m')
 
@@ -92,13 +92,13 @@ def mostrarRpm():
     def animate(i,pdatos,udatos):
         #respuesta = arduino.readline().decode('ascii')
         
-        lista1 = respuesta.split(',') 
-        var4 = float(lista1[3])
+        listaR = respuesta.split(',') 
+        rpm = float(listaR[3])
         
-        etiqueta_04['text']=' '+str(var4)+" rpm"
+        etiqueta_04['text']=' '+str(rpm)+" rpm"
 
         pdatos.append(i)
-        udatos.append(var4)
+        udatos.append(rpm)
         ax4.clear()
         ax4.plot(pdatos,udatos, color='k')
 
@@ -161,7 +161,6 @@ mostrarHumedad()
 mostrarTemperatura()
 mostrarDistancia()
 mostrarRpm()
-
 
 Button(frame, text='Apagar Motor', width=15,height=2,font='Monospace 18 bold',bg='LightSkyBlue2', command=apagar).place(x=1590, y=740)
 Button(frame, text='Encender Motor', width=15,height=2,font='Monospace 18 bold',bg='LightSkyBlue2', command=encender).place(x=1290, y=740)
